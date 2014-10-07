@@ -2,3 +2,5 @@
 target/
 *.spvchain
 *.wallet
+*.dat
+*.spv

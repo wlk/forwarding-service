@@ -2,19 +2,27 @@ package com.varwise.btc.forwarding
 
 import com.google.common.util.concurrent.{FutureCallback, Futures}
 import org.bitcoinj.core.{Address, NetworkParameters, _}
+import org.bitcoinj.store.MemoryBlockStore
 
 import scala.collection.JavaConverters._
 
 class ForwardingService(params: NetworkParameters, ECkeys: List[ECKey], destination: Address) {
+
   override def toString(): String ={
     "ForwardingService{ " + params + ", " + destination + ", " + ECkeys + "}"
   }
 
   val wallet = new Wallet(params)
-  wallet.importKeys(ECkeys.asJava)
+  val importedCount = wallet.importKeys(ECkeys.asJava)
+  Console.println("imported: " + importedCount + " keys")
 
   val peerGroup = ForwardingPeerGroupFactory.get(wallet, params)
   val coinForwarder = new CoinForwarder(params, wallet, peerGroup, destination)
+
+  def addKeys(keys: List[ECKey]): Unit ={
+    val imported = wallet.importKeys(keys.asJava)
+    Console.println("imported: " + imported + " keys")
+  }
 
   def start = {
     peerGroup.startAsync
@@ -23,6 +31,7 @@ class ForwardingService(params: NetworkParameters, ECkeys: List[ECKey], destinat
     Console.println("Blockchain download done")
 
     Console.println("Total coins: " + wallet.getBalance.toFriendlyString)
+    //if(wallet.getBalance.isGreaterThan(Transaction.MIN_NONDUST_OUTPUT)){
     if(wallet.getBalance.isGreaterThan(Coin.SATOSHI.multiply(5))){
       coinForwarder.forwardAllCoins()
     }
@@ -38,7 +47,7 @@ class ForwardingService(params: NetworkParameters, ECkeys: List[ECKey], destinat
         Console.println("Transaction will be forwarded after it confirms.")
         Futures.addCallback(tx.getConfidence.getDepthFuture(1), new FutureCallback[Transaction] {
           def onSuccess(result: Transaction) {
-            coinForwarder.forwardAllCoins()
+            coinForwarder.forwardTransaction(result)
           }
           def onFailure(t: Throwable) {
             throw new RuntimeException(t)

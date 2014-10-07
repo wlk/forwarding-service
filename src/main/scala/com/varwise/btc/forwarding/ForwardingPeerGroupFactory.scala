@@ -11,7 +11,8 @@ object ForwardingPeerGroupFactory {
     val chain: BlockChain = new BlockChain(params, wallet, blockStore)
     val peerGroup: PeerGroup = new PeerGroup(params, chain)
     peerGroup.addWallet(wallet)
-    if (params.equals(RegTestParams.get)) {
+
+    if (true) { //params.equals(RegTestParams.get)
       Console.println("connecting on regtest net to localhost")
       peerGroup.connectToLocalHost()
     }
