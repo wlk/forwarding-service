@@ -9,6 +9,8 @@ import scala.collection.JavaConverters._
 class ForwardingService(params: NetworkParameters, ECkeys: List[ECKey], destination: Address) {
   val wallet = new Wallet(params)
   addKeys(ECkeys)
+  wallet.allowSpendingUnconfirmedTransactions()
+
 
   val peerGroup = ForwardingPeerGroupFactory.get(wallet, params)
   val coinForwarder = new CoinForwarder(params, wallet, peerGroup, destination)
