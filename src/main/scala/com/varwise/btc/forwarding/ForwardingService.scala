@@ -1,13 +1,9 @@
 package com.varwise.btc.forwarding
 
+import com.google.common.util.concurrent.{FutureCallback, Futures}
+import org.bitcoinj.core.{Address, NetworkParameters, _}
 
-import com.google.common.base.Preconditions._
-import com.google.common.util.concurrent.{MoreExecutors, FutureCallback, Futures}
-import org.bitcoinj.core.{Address, NetworkParameters}
-import org.bitcoinj.core._
-import org.bitcoinj.crypto.KeyCrypterException
 import scala.collection.JavaConverters._
-
 
 class ForwardingService(params: NetworkParameters, ECkeys: List[ECKey], destination: Address) {
   override def toString(): String ={

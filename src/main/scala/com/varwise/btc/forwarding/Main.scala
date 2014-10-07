@@ -4,14 +4,14 @@ import java.io.File
 
 import com.typesafe.config._
 import org.bitcoinj.core._
-import org.bitcoinj.params.{RegTestParams, TestNet3Params, MainNetParams}
+import org.bitcoinj.params.{MainNetParams, RegTestParams, TestNet3Params}
 
 import scala.io.Source
 
 object Main extends App {
   override def main(args: Array[String]): Unit = {
     if(args.length != 1){
-      Console.println("USAGE: sbt  sbt \"run-main com.varwise.btc.forwarding.Main regtest\"")
+      Console.println("USAGE: sbt \"run-main com.varwise.btc.forwarding.Main regtest|main|testnet\"")
     }
     else{
       val configFile: String = args(0) match {
@@ -32,7 +32,7 @@ object Main extends App {
       val file = Source.fromFile(new File(conf.getString("private-key-directory.0")))
 
       val ECkeys = file.getLines().toList map {
-        key => addressToKey(params, key.split(",")(0))
+        key => Utils.addressToKey(params, key.split(",")(0))
       }
 
       Console.println("address is: " + destination)
@@ -42,13 +42,6 @@ object Main extends App {
       Console.println("forwarding service:\n" + fs)
 
       fs.start
-    }
-  }
-
-  def addressToKey(params: NetworkParameters, sourceAddress: String): ECKey = {
-    sourceAddress match {
-      case _ if sourceAddress.length == 51 || sourceAddress.length == 52 => new DumpedPrivateKey(params, sourceAddress).getKey
-      case _ => ECKey.fromPrivate(Base58.decodeToBigInteger(sourceAddress))
     }
   }
 }
