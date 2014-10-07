@@ -31,15 +31,17 @@ object Main extends App {
 
       val file = Source.fromFile(new File(conf.getString("private-key-directory.0")))
 
-      val eckeys = file.getLines().toList map { //private keys in WIF format
+      val ECkeys = file.getLines().toList map {
         key => addressToKey(params, key.split(",")(0))
       }
 
       Console.println("address is: " + destination)
 
-      val fs = new ForwardingService(params, eckeys, destination)
+      val fs = new ForwardingService(params, ECkeys, destination)
 
       Console.println("forwarding service:\n" + fs)
+
+      fs.start
     }
   }
 
