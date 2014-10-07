@@ -32,7 +32,10 @@ object Main extends App {
       val file = Source.fromFile(new File(conf.getString("private-key-directory.0")))
 
       val ECkeys = file.getLines().toList map {
-        key => Utils.addressToKey(params, key.split(",")(0))
+        key => key match {
+          case _ if key.contains(",") => Utils.addressToKey(params, key.split(",")(0))
+          case _ => Utils.addressToKey(params, key)
+        }
       }
 
       Console.println("address is: " + destination)
