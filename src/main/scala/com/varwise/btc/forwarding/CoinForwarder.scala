@@ -10,19 +10,20 @@ class CoinForwarder(params: NetworkParameters, wallet: Wallet, peerGroup: PeerGr
     try {
       val value = wallet.getBalance
       Console.println("Sending " + value.toFriendlyString)
-      //val tx: Transaction = new Transaction(params)
-      //val request: Wallet.SendRequest = Wallet.SendRequest.forTx(tx)
+      val tx: Transaction = new Transaction(params)
+      val request: Wallet.SendRequest = Wallet.SendRequest.forTx(tx)
+      request.emptyWallet = true
 
-      val amountToSend: Coin = value//.subtract(Transaction.REFERENCE_DEFAULT_MIN_TX_FEE)
-      val sendResult: Wallet.SendResult = wallet.sendCoins(peerGroup, destination, amountToSend)
-      checkNotNull(sendResult)
+      tx.addOutput(value, destination)
+
+      wallet.completeTx(request)
+      wallet.commitTx(request.tx)
+
+      peerGroup.broadcastTransaction(request.tx).get
+      Console.println("Sent all coins! Transaction hash is " + tx.getHashAsString)
+      Console.println("Total coins: " + wallet.getBalance.toFriendlyString)
+
       Console.println("Sending ...")
-      sendResult.broadcastComplete.addListener(new Runnable {
-        def run {
-          Console.println("Sent all coins! Transaction hash is " + sendResult.tx.getHashAsString)
-          Console.println("Total coins: " + wallet.getBalance.toFriendlyString)
-        }
-      }, MoreExecutors.sameThreadExecutor)
     }
     catch {
       case e: KeyCrypterException => {
