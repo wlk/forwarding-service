@@ -7,14 +7,8 @@ import org.bitcoinj.store.MemoryBlockStore
 import scala.collection.JavaConverters._
 
 class ForwardingService(params: NetworkParameters, ECkeys: List[ECKey], destination: Address) {
-
-  override def toString(): String ={
-    "ForwardingService{ " + params + ", " + destination + ", " + ECkeys + "}"
-  }
-
   val wallet = new Wallet(params)
-  val importedCount = wallet.importKeys(ECkeys.asJava)
-  Console.println("imported: " + importedCount + " keys")
+  addKeys(ECkeys)
 
   val peerGroup = ForwardingPeerGroupFactory.get(wallet, params)
   val coinForwarder = new CoinForwarder(params, wallet, peerGroup, destination)
@@ -60,6 +54,7 @@ class ForwardingService(params: NetworkParameters, ECkeys: List[ECKey], destinat
     Console.println("Total coins: " + wallet.getBalance.toFriendlyString)
   }
 
-
-
+  override def toString(): String ={
+    "ForwardingService{ " + params + ", " + destination + ", " + ECkeys + "}"
+  }
 }
