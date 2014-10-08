@@ -9,8 +9,8 @@ import scala.io.Source
 
 object Main extends App {
   override def main(args: Array[String]): Unit = {
-    if(args.length != 3){
-      Console.println("USAGE: sbt \"run-main com.varwise.btc.forwarding.Main regtest|main|testnet\"")
+    if(args.length != 4){
+      Console.println("USAGE: sbt \"run-main com.varwise.btc.forwarding.Main regtest|main|testnet <dest address> <file> <threads>\"")
     }
     else{
 
@@ -25,17 +25,19 @@ object Main extends App {
       val file = Source.fromFile(new File(args(2)))
 
       val ECkeys = file.getLines().toList map {
-        key => key match {
-          case _ if key.contains(",") => Utils.addressToKey(params, key.split(",")(0))
-          case _ => Utils.addressToKey(params, key)
-        }
+        case key if key.contains(",") => Utils.addressToKey(params, key.split(",")(0))
+        case key => Utils.addressToKey(params, key)
       }
 
-      Console.println("address is: " + destination)
+      val threads = args(3).toInt
 
-      val fs = new ForwardingService(params, ECkeys, destination)
-
-      fs.start
+      ECkeys.grouped(ECkeys.size / threads) foreach {
+        sublist => new Thread(new Runnable {
+            def run() {
+              new ForwardingService(params, sublist, destination).start
+            }
+          }).start()
+      }
     }
   }
 }
