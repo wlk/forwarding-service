@@ -2,7 +2,6 @@ package com.varwise.btc.forwarding
 
 import com.google.common.util.concurrent.{FutureCallback, Futures}
 import org.bitcoinj.core.{Address, NetworkParameters, _}
-import org.bitcoinj.store.MemoryBlockStore
 
 import scala.collection.JavaConverters._
 
@@ -15,7 +14,7 @@ class ForwardingService(params: NetworkParameters, ECkeys: List[ECKey], destinat
   val peerGroup = ForwardingPeerGroupFactory.get(wallet, params)
   val coinForwarder = new CoinForwarder(params, wallet, peerGroup, destination)
 
-  def addKeys(keys: List[ECKey]): Unit ={
+  def addKeys(keys: List[ECKey]): Unit = {
     val imported = wallet.importKeys(keys.asJava)
     Console.println("imported: " + imported + " keys")
   }
@@ -46,6 +45,7 @@ class ForwardingService(params: NetworkParameters, ECkeys: List[ECKey], destinat
           def onSuccess(result: Transaction) {
             coinForwarder.forwardTransaction(result)
           }
+
           def onFailure(t: Throwable) {
             throw new RuntimeException(t)
           }
@@ -57,7 +57,7 @@ class ForwardingService(params: NetworkParameters, ECkeys: List[ECKey], destinat
     Console.println("Total coins: " + wallet.getBalance.toFriendlyString)
   }
 
-  override def toString(): String ={
+  override def toString(): String = {
     "ForwardingService{ " + params + ", " + destination + ", " + ECkeys + "}"
   }
 }

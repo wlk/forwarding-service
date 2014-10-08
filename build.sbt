@@ -4,6 +4,8 @@ assemblySettings
 
 jarName in assembly := "forwarding-service.jar"
 
+test in assembly := {}
+
 organization := "com.varwise"
 
 name := "forwarding-service"

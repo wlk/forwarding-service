@@ -1,8 +1,8 @@
 package com.varwise.btc.forwarding
 
-import org.bitcoinj.core.{BlockChain, NetworkParameters, PeerGroup, Wallet}
-import org.bitcoinj.net.discovery.DnsDiscovery
-import org.bitcoinj.params.RegTestParams
+import java.net.InetAddress
+
+import org.bitcoinj.core._
 import org.bitcoinj.store.MemoryBlockStore
 
 object ForwardingPeerGroupFactory {
@@ -11,11 +11,13 @@ object ForwardingPeerGroupFactory {
     val chain: BlockChain = new BlockChain(params, wallet, blockStore)
     val peerGroup: PeerGroup = new PeerGroup(params, chain)
     peerGroup.addWallet(wallet)
-    peerGroup.setUseLocalhostPeerWhenPossible(true)
+    peerGroup.setUseLocalhostPeerWhenPossible(false)
+    peerGroup.addAddress(new PeerAddress(InetAddress.getByName("127.0.0.1"), 9333)) //btcd
+    peerGroup.addAddress(new PeerAddress(InetAddress.getByName("127.0.0.1"), 8333)) //bitcoin-qt
 
     //if (params.equals(RegTestParams.get)) {
-      Console.println("connecting on " + params + " net to localhost")
-      peerGroup.connectToLocalHost()
+    Console.println("connecting on " + params + " net to localhost")
+    //peerGroup.connectToLocalHost()
     //}
     //else {
     //  Console.println("connecting on " + params + " net via dns discovery")

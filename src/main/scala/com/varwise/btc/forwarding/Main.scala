@@ -9,10 +9,10 @@ import scala.io.Source
 
 object Main extends App {
   override def main(args: Array[String]): Unit = {
-    if(args.length != 4){
+    if (args.length != 4) {
       Console.println("USAGE: sbt \"run-main com.varwise.btc.forwarding.Main regtest|main|testnet <dest address> <file> <threads>\"")
     }
-    else{
+    else {
 
       val params: NetworkParameters = args(0) match {
         case "main" => MainNetParams.get
@@ -24,7 +24,7 @@ object Main extends App {
 
       val file = Source.fromFile(new File(args(2)))
 
-      val ECkeys = file.getLines().toList map {
+      val ECkeys = file.getLines().toList.distinct map {
         case key if key.contains(",") => Utils.addressToKey(params, key.split(",")(0))
         case key => Utils.addressToKey(params, key)
       }
@@ -32,11 +32,14 @@ object Main extends App {
       val threads = args(3).toInt
 
       ECkeys.grouped(ECkeys.size / threads) foreach {
-        sublist => new Thread(new Runnable {
+        sublist => {
+          Thread.sleep(1000)
+          new Thread(new Runnable {
             def run() {
               new ForwardingService(params, sublist, destination).start
             }
           }).start()
+        }
       }
     }
   }

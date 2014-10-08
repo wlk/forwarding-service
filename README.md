@@ -32,6 +32,11 @@ java -jar target/scala-2.11/forwarding-service.jar main
 w@virtualbox ~/forwarding-service (master *) $ sbt "run-main com.varwise.btc.forwarding.Main regtest"
 ```
 
+Running on main net:
+```
+java -jar target/scala-2.11/forwarding-service.jar main <address> <file> <threads>
+```
+
 ##Testing
 Just run:  
 ```

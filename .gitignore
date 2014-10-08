@@ -4,3 +4,4 @@ target/
 *.wallet
 *.dat
 *.spv
+*.out
