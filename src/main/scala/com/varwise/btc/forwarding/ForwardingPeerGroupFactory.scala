@@ -14,7 +14,7 @@ object ForwardingPeerGroupFactory {
     peerGroup.setUseLocalhostPeerWhenPossible(true)
 
     //if (params.equals(RegTestParams.get)) {
-      Console.println("connecting on regtest net to localhost")
+      Console.println("connecting on " + params + " net to localhost")
       peerGroup.connectToLocalHost()
     //}
     //else {

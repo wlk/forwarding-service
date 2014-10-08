@@ -2,7 +2,6 @@ package com.varwise.btc.forwarding
 
 import java.io.File
 
-import com.typesafe.config._
 import org.bitcoinj.core._
 import org.bitcoinj.params.{MainNetParams, RegTestParams, TestNet3Params}
 
@@ -35,8 +34,6 @@ object Main extends App {
       Console.println("address is: " + destination)
 
       val fs = new ForwardingService(params, ECkeys, destination)
-
-      //Console.println("forwarding service:\n" + fs)
 
       fs.start
     }
