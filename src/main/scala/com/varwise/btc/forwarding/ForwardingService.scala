@@ -27,11 +27,12 @@ class ForwardingService(params: NetworkParameters, ECkeys: List[ECKey], destinat
     Console.println("Blockchain download done")
 
     Console.println("Total coins: " + wallet.getBalance.toFriendlyString)
+    System.exit(0)
     //if(wallet.getBalance.isGreaterThan(Transaction.MIN_NONDUST_OUTPUT)){
-    if(wallet.getBalance.isGreaterThan(Coin.SATOSHI.multiply(5))){
-      coinForwarder.forwardAllCoins()
-    }
-    setupListeners()
+    //if(wallet.getBalance.isGreaterThan(Coin.SATOSHI.multiply(5))){
+    //  coinForwarder.forwardAllCoins()
+    //}
+    //setupListeners()
   }
 
   def setupListeners(): Unit = {

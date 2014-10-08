@@ -1,3 +1,9 @@
+import AssemblyKeys._
+
+assemblySettings
+
+jarName in assembly := "forwarding-service.jar"
+
 organization := "com.varwise"
 
 name := "forwarding-service"

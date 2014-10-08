@@ -42,7 +42,7 @@ object Main extends App {
 
       val fs = new ForwardingService(params, ECkeys, destination)
 
-      Console.println("forwarding service:\n" + fs)
+      //Console.println("forwarding service:\n" + fs)
 
       fs.start
     }

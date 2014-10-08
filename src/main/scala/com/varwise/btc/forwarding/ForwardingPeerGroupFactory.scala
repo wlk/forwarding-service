@@ -11,15 +11,16 @@ object ForwardingPeerGroupFactory {
     val chain: BlockChain = new BlockChain(params, wallet, blockStore)
     val peerGroup: PeerGroup = new PeerGroup(params, chain)
     peerGroup.addWallet(wallet)
+    peerGroup.setUseLocalhostPeerWhenPossible(true)
 
-    if (params.equals(RegTestParams.get)) {
+    //if (params.equals(RegTestParams.get)) {
       Console.println("connecting on regtest net to localhost")
       peerGroup.connectToLocalHost()
-    }
-    else {
-      Console.println("connecting on " + params + " net via dns discovery")
-      peerGroup.addPeerDiscovery(new DnsDiscovery(params))
-    }
+    //}
+    //else {
+    //  Console.println("connecting on " + params + " net via dns discovery")
+    //  peerGroup.addPeerDiscovery(new DnsDiscovery(params))
+    //}
 
     peerGroup
   }

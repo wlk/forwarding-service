@@ -15,6 +15,17 @@ There are 2 configuration parameters:
 ##CSV format
 We look only at the first field in CSV file, other fields can serve as comment, or anything else.
 
+##Building runnable jar
+just run:
+```
+sbt assembly
+```
+
+This will create forwarding-service.jar in target/scala-2.11/ directory, you can run it like this:
+
+```
+java -jar target/scala-2.11/forwarding-service.jar main
+```
 
 ##Running:
 ```
