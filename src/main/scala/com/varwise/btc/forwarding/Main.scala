@@ -10,15 +10,10 @@ import scala.io.Source
 
 object Main extends App {
   override def main(args: Array[String]): Unit = {
-    if(args.length != 1){
+    if(args.length != 3){
       Console.println("USAGE: sbt \"run-main com.varwise.btc.forwarding.Main regtest|main|testnet\"")
     }
     else{
-      val configFile: String = args(0) match {
-        case "main" => "application.conf"
-        case "testnet" => "application-testnet.conf"
-        case "regtest" => "application-testnet.conf"
-      }
 
       val params: NetworkParameters = args(0) match {
         case "main" => MainNetParams.get
@@ -26,10 +21,9 @@ object Main extends App {
         case "regtest" => RegTestParams.get
       }
 
-      val conf = ConfigFactory.load(configFile)
-      val destination = new Address(params, conf.getString("destination-address"))
+      val destination = new Address(params, args(1))
 
-      val file = Source.fromFile(new File(conf.getString("private-key-directory.0")))
+      val file = Source.fromFile(new File(args(2)))
 
       val ECkeys = file.getLines().toList map {
         key => key match {
