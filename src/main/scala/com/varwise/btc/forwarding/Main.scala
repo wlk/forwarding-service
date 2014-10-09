@@ -1,6 +1,7 @@
 package com.varwise.btc.forwarding
 
 import java.io.File
+import java.util.concurrent.{TimeUnit, Executors}
 
 import org.bitcoinj.core._
 import org.bitcoinj.params.{MainNetParams, RegTestParams, TestNet3Params}
@@ -31,16 +32,23 @@ object Main extends App {
 
       val threads = args(3).toInt
 
+      val es  = Executors.newCachedThreadPool()
+
       ECkeys.grouped(ECkeys.size / threads) foreach {
         sublist => {
-          Thread.sleep(1000)
-          new Thread(new Runnable {
+          Thread.sleep(2000) //workaround for possible bug in bitcoinj
+          es.execute(new Runnable {
             def run() {
               new ForwardingService(params, sublist, destination).start
             }
-          }).start()
+          })
         }
       }
+      Console.println("all threads started")
+      es.shutdown()
+      Console.println("shutting down Executor, awaiting termination")
+      es.awaitTermination(Long.MaxValue, TimeUnit.NANOSECONDS)
+      Console.println("Terminated")
     }
   }
 }

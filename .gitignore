@@ -5,3 +5,4 @@ target/
 *.dat
 *.spv
 *.out
+newrelic/

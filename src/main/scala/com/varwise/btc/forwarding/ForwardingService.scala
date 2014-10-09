@@ -4,11 +4,14 @@ import com.google.common.util.concurrent.{FutureCallback, Futures}
 import org.bitcoinj.core.{Address, NetworkParameters, _}
 
 import scala.collection.JavaConverters._
+import scala.concurrent.duration._
 
 class ForwardingService(params: NetworkParameters, ECkeys: List[ECKey], destination: Address) {
+  val startTime = System.currentTimeMillis()
   val wallet = new Wallet(params)
   addKeys(ECkeys)
   wallet.allowSpendingUnconfirmedTransactions()
+
 
 
   val peerGroup = ForwardingPeerGroupFactory.get(wallet, params)
@@ -26,7 +29,9 @@ class ForwardingService(params: NetworkParameters, ECkeys: List[ECKey], destinat
     Console.println("Blockchain download done")
 
     Console.println("Total coins: " + wallet.getBalance.toFriendlyString)
-    System.exit(0)
+    val initialSyncTime =  System.currentTimeMillis() - startTime
+    Console.println("Initial sync took: " + Duration(initialSyncTime, MILLISECONDS).toMinutes + " min")
+
     //if(wallet.getBalance.isGreaterThan(Transaction.MIN_NONDUST_OUTPUT)){
     //if(wallet.getBalance.isGreaterThan(Coin.SATOSHI.multiply(5))){
     //  coinForwarder.forwardAllCoins()

@@ -15,14 +15,7 @@ object ForwardingPeerGroupFactory {
     peerGroup.addAddress(new PeerAddress(InetAddress.getByName("127.0.0.1"), 9333)) //btcd
     peerGroup.addAddress(new PeerAddress(InetAddress.getByName("127.0.0.1"), 8333)) //bitcoin-qt
 
-    //if (params.equals(RegTestParams.get)) {
-    Console.println("connecting on " + params + " net to localhost")
-    //peerGroup.connectToLocalHost()
-    //}
-    //else {
-    //  Console.println("connecting on " + params + " net via dns discovery")
-    //  peerGroup.addPeerDiscovery(new DnsDiscovery(params))
-    //}
+    Console.println("connecting on " + params.getId + " net to localhost")
 
     peerGroup
   }

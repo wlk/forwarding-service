@@ -37,6 +37,11 @@ Running on main net:
 java -jar target/scala-2.11/forwarding-service.jar main <address> <file> <threads>
 ```
 
+###More examples
+```
+time java -javaagent:./newrelic/newrelic.jar -Xmx1000m -jar target/scala-2.11/forwarding-service.jar main address /home/w/private-keys-1k 2
+```
+
 ##Testing
 Just run:  
 ```
