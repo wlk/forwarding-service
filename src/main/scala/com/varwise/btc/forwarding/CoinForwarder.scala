@@ -26,12 +26,8 @@ class CoinForwarder(params: NetworkParameters, wallet: Wallet, peerGroup: PeerGr
       Console.println("Sending ...")
     }
     catch {
-      case e: KeyCrypterException => {
-        throw new RuntimeException(e)
-      }
-      case e: InsufficientMoneyException => {
-        throw new RuntimeException(e)
-      }
+      case e: KeyCrypterException => throw new RuntimeException(e)
+      case e: InsufficientMoneyException => throw new RuntimeException(e)
     }
   }
 
@@ -44,7 +40,7 @@ class CoinForwarder(params: NetworkParameters, wallet: Wallet, peerGroup: PeerGr
       checkNotNull(sendResult)
       Console.println("Sending ...")
       sendResult.broadcastComplete.addListener(new Runnable {
-        def run {
+        def run() {
           Console.println("Sent coins onwards! Transaction hash is " + sendResult.tx.getHashAsString)
           Console.println("Total coins: " + wallet.getBalance.toFriendlyString)
         }

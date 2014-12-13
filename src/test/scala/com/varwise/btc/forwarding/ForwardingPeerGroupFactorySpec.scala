@@ -6,6 +6,8 @@ import org.bitcoinj.core.{Address, ECKey}
 import org.bitcoinj.params.{RegTestParams, TestNet3Params}
 
 class ForwardingPeerGroupFactorySpec extends UnitSpec {
+
+  /** This test will fail if you don't have full node running in regtest mode */
   "ForwardingPeerGroupFactory" should "get PeerGroup" in {
     val fs = new ForwardingService(RegTestParams.get, List(ECKey.fromPrivate(BigInteger.ONE)), new Address(TestNet3Params.get, "msoGGRkYLWxvEwFYUJtpUiNjMALyM5xyLf"))
 

@@ -39,7 +39,7 @@ java -jar target/scala-2.11/forwarding-service.jar main <address> <file> <thread
 
 ###More examples
 ```
-time java -javaagent:./newrelic/newrelic.jar -Xmx1000m -jar target/scala-2.11/forwarding-service.jar main address /home/w/private-keys-1k 2
+time java -Xmx1000m -jar target/scala-2.11/forwarding-service.jar main address /home/w/private-keys-1k 2
 ```
 
 ##Testing

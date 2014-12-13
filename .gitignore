@@ -6,3 +6,4 @@ target/
 *.spv
 *.out
 newrelic/
+.gradle

@@ -12,5 +12,4 @@ object Utils {
       case _ => ECKey.fromPrivate(Base58.decodeToBigInteger(sourceAddress)) //base58
     }
   }
-
 }

@@ -13,7 +13,6 @@ class ForwardingService(params: NetworkParameters, ECkeys: List[ECKey], destinat
   wallet.allowSpendingUnconfirmedTransactions()
 
 
-
   val peerGroup = ForwardingPeerGroupFactory.get(wallet, params)
   val coinForwarder = new CoinForwarder(params, wallet, peerGroup, destination)
 
@@ -22,21 +21,17 @@ class ForwardingService(params: NetworkParameters, ECkeys: List[ECKey], destinat
     Console.println("imported: " + imported + " keys")
   }
 
-  def start = {
+  def start() = {
     peerGroup.startAsync
     Console.println("Starting blockchain download")
     peerGroup.downloadBlockChain()
     Console.println("Blockchain download done")
 
     Console.println("Total coins: " + wallet.getBalance.toFriendlyString)
-    val initialSyncTime =  System.currentTimeMillis() - startTime
+    val initialSyncTime = System.currentTimeMillis() - startTime
     Console.println("Initial sync took: " + Duration(initialSyncTime, MILLISECONDS).toMinutes + " min")
 
-    //if(wallet.getBalance.isGreaterThan(Transaction.MIN_NONDUST_OUTPUT)){
-    //if(wallet.getBalance.isGreaterThan(Coin.SATOSHI.multiply(5))){
-    //  coinForwarder.forwardAllCoins()
-    //}
-    //setupListeners()
+    setupListeners()
   }
 
   def setupListeners(): Unit = {
@@ -62,7 +57,7 @@ class ForwardingService(params: NetworkParameters, ECkeys: List[ECKey], destinat
     Console.println("Total coins: " + wallet.getBalance.toFriendlyString)
   }
 
-  override def toString(): String = {
+  override def toString: String = {
     "ForwardingService{ " + params + ", " + destination + ", " + ECkeys + "}"
   }
 }
